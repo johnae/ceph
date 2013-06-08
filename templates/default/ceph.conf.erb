@@ -1,0 +1,42 @@
+[global]
+        ; use cephx or none
+        auth supported = none
+        auth cluster required = none
+        auth service required = none
+        auth client required = none
+        #keyring = /etc/ceph/$name.keyring
+
+#[mon]
+#        mon data = /srv/mon.$id
+
+[mds]
+
+[osd]
+        #osd data = /srv/osd.$id
+        #osd journal = /srv/osd.$id.journal
+        osd journal size = 100
+        ; uncomment the following line if you are mounting with ext4
+        ; filestore xattr use omap = true
+
+[mon.a]
+        host = <%= node['hostname'] %>
+        mon addr = <%= node['ceph']['mon_ip'] %>:6789
+
+<% node['ceph']['num_osds'].times do |osd_id| %>
+[osd.<%= osd_id %>]
+        host = <%= node['hostname'] %>
+        addr = <%= node[:fqdn] %>
+
+<% end %>
+
+[client.radosgw.gateway]
+    #admin socket = /tmp/rgw.asok
+    host = <%= node['hostname'] %>
+    #keyring = /etc/ceph/keyring.radosgw.gateway
+    rgw socket path = <%= node['ceph']['radosgw']['socket_path'] %>
+    rgw dns name = <%= node['ceph']['radosgw']['api_fqdn'] %>
+    rgw print continue = true
+    rgw cache enabled = 1
+    rgw cache lru size = 10000
+    #rgw print continue = false ## needed for nginx? or not with nginx 1.1.x?
+    log_file = <%= node['ceph']['radosgw']['log_file'] %>

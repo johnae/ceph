@@ -1,0 +1,13 @@
+{
+  "sha": "2b878add39524f73be1360bf64a85ba838d568a5",
+  "sources": {
+    "apt": {
+      "locked_version": "1.10.0",
+      "constraint": ">= 1.9.2"
+    },
+    "apache2": {
+      "locked_version": "1.6.2",
+      "constraint": ">= 1.6.2"
+    }
+  }
+}
